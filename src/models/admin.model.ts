@@ -1,15 +1,14 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/dtabase';
 
-class Administrador extends Model {
-    public id!: number;
+class Admins extends Model {
     public nome!: string;
     public email!: string;
     public cpf!: string;
     public senha!: string;
 }
 
-Administrador.init(
+Admins.init(
     {
         nome: {
             type: DataTypes.STRING,
@@ -34,8 +33,9 @@ Administrador.init(
     {
         sequelize,
         modelName: 'Administrador',
+        tableName: 'admins',
         timestamps: true,
     }
 );
     
-export default Administrador;
+export default Admins;

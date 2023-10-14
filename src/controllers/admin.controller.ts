@@ -32,7 +32,7 @@ class AdministradorController {
             
             let status = 500;
         
-            if (Array.isArray(error) && error.includes('Já existe um administrador com este email ou CPF.')) {
+            if (Array.isArray(error) && error.includes(ErrosValidacao.AdminExistente)) {
                 status = 409;
             }
         

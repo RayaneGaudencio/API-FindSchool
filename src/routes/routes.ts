@@ -12,6 +12,7 @@ router.post('/escolas', escolaController.criarEscola);
 
 // Rota para cadastrar admin
 router.post('/admins', adminController.criarAdministrador); 
+router.post('/login_admin', adminController.fazerLogin)
 
 
 export default router;

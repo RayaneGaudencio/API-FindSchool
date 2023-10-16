@@ -37,5 +37,5 @@ Admins.init(
         timestamps: true,
     }
 );
-    
+
 export default Admins;

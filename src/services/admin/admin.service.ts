@@ -3,6 +3,7 @@ import { Op } from 'sequelize';
 import CadastroAdminDTO from '../../dtos/admin/cadastro-admin.dto';
 import ErrosValidacao from '../erros/erros-validacao-dados';
 import Admins from '../../models/admin.model';
+import { DadosLoginAdminDTO } from '../../dtos/admin/dados-login-admin.dto';
 
 export default class AdminService {
     async criarAdmin(adminDTO: CadastroAdminDTO): Promise<CadastroAdminDTO> {
@@ -59,6 +60,31 @@ export default class AdminService {
         } catch (error) {
             console.error('Erro ao criar administrador:', error);
             throw new Error('Erro ao criar administrador.');
+        }
+    }
+
+
+    async encontrarPorEmailESenha(dadosDTO: DadosLoginAdminDTO): Promise<string[] | boolean> {
+        try {
+            const erros: string[] = [];
+
+            const { email, senha } = dadosDTO;
+    
+            console.log(senha)
+            const admin = await Administrador.findOne({
+                where: { email }
+            })
+
+            if (!admin) {
+                erros.push(ErrosValidacao.EmailNaoCadastrado);
+                return erros;
+            } 
+
+            // validando apenas email, por enquanto
+            
+            return true;
+        } catch (error) {
+            throw new Error('Erro ao procurar administrador.')
         }
     }
 }

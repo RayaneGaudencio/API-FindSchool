@@ -3,6 +3,7 @@ import AdminService from '../services/admin/admin.service';
 import CadastroAdministradorDTO from '../dtos/admin/cadastro-admin.dto';
 import { DadosCadastroAdministradorDTO } from '../dtos/admin/dados-cadastro-admin.dto';
 import ErrosValidacao from '../services/erros/erros-validacao-dados';
+import { DadosLoginAdminDTO } from '../dtos/admin/dados-login-admin.dto';
 
 const administradorService = new AdminService();
 
@@ -42,8 +43,43 @@ class AdministradorController {
                 errors: error
             });
 
-        }
-        
+        }   
+    }
+
+    async fazerLogin(req: Request, res: Response): Promise<void> {
+       try {
+            const { email, senha }: DadosLoginAdminDTO = req.body;
+
+            const retorno = await administradorService.encontrarPorEmailESenha({
+                email,
+                senha
+            });
+
+            if (Array.isArray(retorno)) {
+                if (retorno.includes(ErrosValidacao.EmailNaoCadastrado)) {
+                    res.status(401).json({
+                        status: 'error',
+                        message: ErrosValidacao.EmailNaoCadastrado
+                    });
+                } else if (retorno.includes(ErrosValidacao.SenhaIncorreta)) {
+                    res.status(401).json({
+                        status: 'error',
+                        message: ErrosValidacao.SenhaIncorreta
+                    });
+                }
+            } else {
+                res.status(200).json({
+                    status: 'success',
+                    message: 'Login efetuado.'
+                });
+            }
+       } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                status: 'error',
+                message: 'Erro ao fazer login.'
+            });
+        }   
     }
 }
 

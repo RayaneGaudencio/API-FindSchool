@@ -30,20 +30,20 @@ class AdministradorController {
             res.status(201).json(respostaDTO);
         } catch (error) {
             console.error(error);
-            
+        
             let status = 500;
+            let mensagemDeErro = 'Erro ao criar administrador.';
         
             if (Array.isArray(error) && error.includes(ErrosValidacao.AdminExistente)) {
                 status = 409;
+                mensagemDeErro = ErrosValidacao.AdminExistente;
             }
         
             res.status(status).json({
                 status: 'error',
-                message: 'Erro ao criar administrador.',
-                errors: error
+                message: mensagemDeErro
             });
-
-        }   
+        }
     }
 
     async fazerLogin(req: Request, res: Response): Promise<void> {

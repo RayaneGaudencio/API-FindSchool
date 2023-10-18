@@ -4,6 +4,7 @@ import CadastroAdminDTO from '../../dtos/admin/cadastro-admin.dto';
 import ErrosValidacao from '../erros/erros-validacao-dados';
 import Admins from '../../models/admin.model';
 import { DadosLoginAdminDTO } from '../../dtos/admin/dados-login-admin.dto';
+import { DadosCadastroAdministradorDTO } from '../../dtos/admin/dados-cadastro-admin.dto';
 
 export default class AdminService {
     async criarAdmin(adminDTO: CadastroAdminDTO): Promise<CadastroAdminDTO> {
@@ -64,25 +65,29 @@ export default class AdminService {
     }
 
 
-    async encontrarPorEmailESenha(dadosDTO: DadosLoginAdminDTO): Promise<string[] | boolean> {
+    async encontrarPorEmailESenha(dadosDTO: DadosLoginAdminDTO): Promise<string[] | { email: string, nome: string}> {
         try {
             const erros: string[] = [];
-
             const { email, senha } = dadosDTO;
     
-            console.log(senha)
+            console.log("Email e senha:", email, senha)
             const admin = await Administrador.findOne({
                 where: { email }
             })
 
-            if (!admin) {
+            if (admin) {
+                const respostaDTO: DadosCadastroAdministradorDTO = {
+                    email: admin.dataValues.email,
+                    nome: admin.dataValues.nome,
+                    cpf: ""
+                }
+                return respostaDTO;
+            } else {
                 erros.push(ErrosValidacao.EmailNaoCadastrado);
-                return erros;
-            } 
-
+            }
             // validando apenas email, por enquanto
-            
-            return true;
+
+            return erros;
         } catch (error) {
             throw new Error('Erro ao procurar administrador.')
         }

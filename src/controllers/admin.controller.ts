@@ -68,11 +68,7 @@ class AdministradorController {
                     });
                 }
             } else {
-                res.status(200).json({
-                    status: 'sucess',
-                    message: 'Login efetuado.',
-                    data: retorno
-                });
+                res.status(200).json(retorno);
             }
        } catch (error) {
             console.error(error);

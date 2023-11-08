@@ -23,7 +23,10 @@ class EscolaController {
                 cnpj: novaEscola.cnpj
             }; 
 
-            res.status(201).json(respostaDTO);
+            res.status(201).json({
+                message: 'Escola cadastrada com sucesso!',
+                data: respostaDTO
+            });
         } catch (errors) {
             console.error(errors);
             res.status(500).json({

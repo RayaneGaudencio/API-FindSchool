@@ -1,13 +1,16 @@
 {
-    "compilerOptions": {
+  "compilerOptions": {
       "target": "ESNext",
-      "module": "CommonJS",
+      "module": "ESNext",
+      "moduleResolution": "node",
+      "esModuleInterop": true,
       "outDir": "./dist",
       "rootDir": "./src",
-      "strict": true
-    },
-    "include": [
+      "strict": true,
+      "typeRoots": ["./node_modules/@types"],
+      "types": ["node", "jest", "sequelize"]
+  },
+  "include": [
       "src/**/*.ts"
-    ]
-  }
-  
+  ]
+}

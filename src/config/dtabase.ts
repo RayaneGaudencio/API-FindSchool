@@ -1,5 +1,4 @@
 import { Sequelize } from 'sequelize';
-
 const sequelize = new Sequelize({
   dialect: 'mysql', 
   host: 'localhost', 
@@ -7,5 +6,4 @@ const sequelize = new Sequelize({
   password: 'senharoot', 
   database: 'findschool', 
 });
-
 export default sequelize;

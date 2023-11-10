@@ -6,11 +6,12 @@ const router = express.Router();
 const adminController = new AdministradorController();
 const escolaController = new EscolaController();
 
-// Rota para criar uma nova escola
+// rotas de escola
 router.post('/escolas', escolaController.criarEscola);
+router.post('/login_escola', escolaController.fazerLogin)
 
 
-// Rota para cadastrar admin
+// rotas de admin
 router.post('/admins', adminController.criarAdministrador); 
 router.post('/login_admin', adminController.fazerLogin)
 

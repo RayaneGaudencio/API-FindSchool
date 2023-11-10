@@ -1,6 +1,9 @@
 import Escola from '../../models/escola.model';
 import { Op } from 'sequelize';
 import CadastroEscolaDTO from '../../dtos/escolas/cadastro-escola.dto'
+import { DadosLoginEscolaDTO } from '../../dtos/escolas/dados-login-escola.dto';
+import { DadosCadastroEscolaDTO } from '../../dtos/escolas/dados-cadastro-escola.dto';
+import ErrosValidacao from '../erros/erros-validacao-dados';
 
 export default class EscolaService {
     async criarEscola(escolaDTO: CadastroEscolaDTO): Promise<CadastroEscolaDTO>{
@@ -52,8 +55,33 @@ export default class EscolaService {
             throw new Error('Erro ao criar escola.')
         }
     }
-    
-    
+
+async encontrarPorEmailESenha(dadosDTO: DadosLoginEscolaDTO): Promise<string[] | { email: string, nome: string}> {
+    try {
+        const erros: string[] = [];
+        const { email, senha } = dadosDTO;
+
+        const escola = await Escola.findOne({
+            where: { email }
+        })
+
+        if (escola) {
+            const respostaDTO: DadosCadastroEscolaDTO = {
+                email: escola.dataValues.email,
+                nome: escola.dataValues.nome,
+                cnpj: escola.dataValues.cnpj
+            }
+            return respostaDTO;
+        } else {
+            erros.push(ErrosValidacao.EmailNaoCadastrado);
+        }
+        // validando apenas email, por enquanto
+
+        return erros;
+    } catch (error) {
+        throw new Error('Erro ao procurar por escola.')
+    }    
+}
 }
 
 function validarEmail(email: string): boolean {

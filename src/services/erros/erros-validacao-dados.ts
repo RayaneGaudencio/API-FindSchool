@@ -10,4 +10,5 @@ export default class ErrosValidacao {
     static SenhaIncorreta = 'Senha incorreta.';
     static EscolaNaoCadastrada = 'Escola não está cadastrada.'
     static AdminNaoCadastrado = 'Administrador não está cadastrado.'
+    static DadosObrigatórios = 'Todos os campos são obrigatórios. Certifique-se de fornecer todos os dados necessários.'
 }

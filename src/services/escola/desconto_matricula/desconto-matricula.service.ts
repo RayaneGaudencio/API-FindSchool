@@ -1,3 +1,5 @@
+import DadosCupomCadastrado from "../../../dtos/escolas/cupom/dados-cupom-cadastrado";
+import DadosCupom from "../../../dtos/escolas/cupom/dados-gerar-cupom.dto";
 import CadastroDescontoMatricula from "../../../dtos/escolas/desconto_matricula/cadastro-desconto-matricula.dto";
 import Admins from "../../../models/admin.model";
 import DescontoMatricula from "../../../models/escola.desconto_matricula.model";
@@ -38,5 +40,16 @@ export default class DescontoMatriculaService {
         } catch (error) {
             throw new Error('Erro ao adicionar desconto à matricula da escola.')
         }
+    }
+
+    async gerarCupom(dadosCupom: DadosCupom): Promise<DadosCupomCadastrado | string[]> {
+
+        const { id_desconto, usuario_cpf } = dadosCupom;
+
+        const erros:string[] = [];
+
+        const descontoCadastrado = await DescontoMatricula.findOne({
+            where: { id:id_desconto }
+        })
     }
 }

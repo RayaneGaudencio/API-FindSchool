@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import CadastroDescontoMatricula from "../dtos/escolas/desconto_matricula/cadastro-desconto-matricula.dto";
 import DescontoMatriculaService from "../services/escola/desconto_matricula/desconto-matricula.service";
 import ErrosValidacao from '../services/erros/erros-validacao-dados';
+import DadosCupom from '../dtos/escolas/cupom/dados-gerar-cupom.dto';
+import DadosCupomCadastrado from '../dtos/escolas/cupom/dados-cupom-cadastrado';
 
 const descontoMatriculaService = new DescontoMatriculaService();
 class CuponsController {
@@ -44,6 +46,26 @@ class CuponsController {
                 message: 'Erro ao acessar servidor.',
                 errors: errors
             });
+        }
+    }
+
+    async gerarCupom(req: Request, res: Response): Promise<void> {
+        try {
+            const { id_desconto, usuario_cpf }: DadosCupom = req.body;
+
+            if (!id_desconto || !usuario_cpf) {
+                res.status(400).json({
+                    message: ErrosValidacao.DadosObrigatórios
+                });
+                return;
+            }
+
+            const retorno:DadosCupomCadastrado = await descontoMatriculaService.gerarCupom({
+               id_desconto,
+               usuario_cpf
+            })
+        } catch (error) {
+            
         }
     }
 }

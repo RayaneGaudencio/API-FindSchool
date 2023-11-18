@@ -9,6 +9,7 @@ const escolaController = new EscolaController();
 // rotas de escola
 router.post('/escolas', escolaController.criarEscola);
 router.post('/login_escola', escolaController.fazerLogin)
+router.post('/cadastrar_endereco', escolaController.cadastrarEndereco)
 
 
 // rotas de admin

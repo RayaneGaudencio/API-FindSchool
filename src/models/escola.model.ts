@@ -7,6 +7,13 @@ class Escola extends Model {
     public email!: string;
     public cnpj!: string;
     public senha!: string;
+
+    static associate(models: any) {
+        Escola.hasOne(models.Endereco, {
+          foreignKey: 'cnpj',
+          as: 'endereco',
+        });
+      }
 }
 
 Escola.init(

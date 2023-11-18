@@ -80,7 +80,14 @@ class EscolaController {
         try {
             const { cep, rua, bairro, cidade, uf, numero, cnpj }: DadosEnderecoDTO = req.body; 
 
-            const dadosEndereco = await dadosEnderecoService.adicionarEndereco({ 
+            if (!cep || !rua || !bairro || !cidade || !uf || !numero || !cnpj) {
+                res.status(400).json({
+                    message: 'Todos os campos são obrigatórios. Certifique-se de fornecer todos os dados necessários.'
+                });
+                return;
+            }
+
+            const retorno = await dadosEnderecoService.adicionarEndereco({ 
                 cep,
                 rua,
                 bairro,
@@ -90,15 +97,20 @@ class EscolaController {
                 cnpj
             })
 
-            res.status(201).json({
-                message: 'Endereço cadastrado com sucesso!',
-                data: dadosEndereco
-            });
+            if (Array.isArray(retorno)) {
+                if (retorno.includes(ErrosValidacao.EscolaNaoCadastrada)) {
+                    res.status(404).json({
+                        message: ErrosValidacao.EscolaNaoCadastrada
+                    });
+                }
+            } else {
+                res.status(201).json(retorno);
+            }
         } catch (errors) {
             console.error(errors);
             res.status(500).json({
                 status: 'error',
-                message: 'Erro ao adicionar endereço à escola.',
+                message: 'Erro ao acessar servidor.',
                 errors: errors
             });
         }

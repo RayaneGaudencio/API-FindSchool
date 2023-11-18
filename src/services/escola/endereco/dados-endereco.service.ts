@@ -1,11 +1,12 @@
 import { DadosEnderecoDTO } from '../../../dtos/escolas/endereco/dados-endereco.dto'
 import Endereco from '../../../models/endereco.model';
 import Escola from '../../../models/escola.model';
+import ErrosValidacao from '../../erros/erros-validacao-dados';
 
 export default class DadosEnderecoService {
 
 
-    async adicionarEndereco(dadosEnderecoDTO: DadosEnderecoDTO): Promise<DadosEnderecoDTO> {
+    async adicionarEndereco(dadosEnderecoDTO: DadosEnderecoDTO): Promise<DadosEnderecoDTO | string[]> {
         try {
             const { cep, rua, bairro, cidade, uf, numero, cnpj } = dadosEnderecoDTO;
 
@@ -26,11 +27,8 @@ export default class DadosEnderecoService {
                   cnpj, 
                 });
             } else {
-                erros.push('Escola não está cadastrada.')
-            }
-
-            if (erros.length > 0) {
-                return Promise.reject(erros);
+                erros.push(ErrosValidacao.EscolaNaoCadastrada)
+                return erros;
             }
         
             return dadosEnderecoDTO;

@@ -8,4 +8,6 @@ export default class ErrosValidacao {
     static CPFInvalido = 'CPF inválido.';
     static EmailNaoCadastrado = 'Email não cadastrado.';
     static SenhaIncorreta = 'Senha incorreta.';
+    static EscolaNaoCadastrada = 'Escola não está cadastrada.'
+    static AdminNaoCadastrado = 'Administrador não está cadastrado.'
 }

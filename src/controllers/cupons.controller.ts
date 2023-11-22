@@ -4,6 +4,7 @@ import DescontoMatriculaService from "../services/escola/desconto_matricula/desc
 import ErrosValidacao from '../services/erros/erros-validacao-dados';
 import DadosCupom from '../dtos/escolas/cupom/dados-gerar-cupom.dto';
 import DadosCupomCadastrado from '../dtos/escolas/cupom/dados-cupom-cadastrado';
+import ErrosCupom from '../services/erros/erros-cupom';
 
 const descontoMatriculaService = new DescontoMatriculaService();
 class CuponsController {
@@ -51,21 +52,50 @@ class CuponsController {
 
     async gerarCupom(req: Request, res: Response): Promise<void> {
         try {
-            const { id_desconto, usuario_cpf }: DadosCupom = req.body;
+            const { desconto_matricula_id, usuario_cpf, escola_cnpj }: DadosCupom = req.body;
 
-            if (!id_desconto || !usuario_cpf) {
+            if (!desconto_matricula_id || !usuario_cpf || !escola_cnpj) {
                 res.status(400).json({
-                    message: ErrosValidacao.DadosObrigatórios
+                    message: ErrosValidacao.DadosObrigatorios
                 });
                 return;
             }
 
-            const retorno:DadosCupomCadastrado = await descontoMatriculaService.gerarCupom({
-               id_desconto,
-               usuario_cpf
+            const retorno = await descontoMatriculaService.gerarCupom({
+                desconto_matricula_id,
+                usuario_cpf,
+                escola_cnpj
             })
-        } catch (error) {
+
+            res.status(201).json({
+                message: "Cupom gerado com sucesso!",
+                data: retorno
+            });
             
+        } catch (errors) {
+            if (Array.isArray(errors)) {
+                if (errors.includes(ErrosValidacao.UsuarioNaoCadastrado)) {
+                    res.status(404).json({
+                        message: ErrosValidacao.UsuarioNaoCadastrado
+                    });
+                } else if (errors.includes(ErrosValidacao.EscolaNaoCadastrada)) {
+                    res.status(404).json({
+                        message: ErrosValidacao.EscolaNaoCadastrada
+                    });
+                } else if (errors.includes(ErrosCupom.DescontoInexistente)) {
+                    res.status(404).json({
+                        message: ErrosCupom.DescontoInexistente
+                    });
+                } else if (errors.includes(ErrosCupom.ErroAoGerarCodigo)) {
+                    res.status(404).json({
+                        message: ErrosCupom.ErroAoGerarCodigo
+                    });
+                } else if (errors.includes(ErrosCupom.CupomExpirado)) {
+                    res.status(409).json({
+                        message: ErrosCupom.CupomExpirado
+                    });
+                }
+            }
         }
     }
 }

@@ -10,5 +10,10 @@ export default class ErrosValidacao {
     static SenhaIncorreta = 'Senha incorreta.';
     static EscolaNaoCadastrada = 'Escola não está cadastrada.'
     static AdminNaoCadastrado = 'Administrador não está cadastrado.'
-    static DadosObrigatórios = 'Todos os campos são obrigatórios. Certifique-se de fornecer todos os dados necessários.'
+    static DadosObrigatorios = 'Todos os campos são obrigatórios. Certifique-se de fornecer todos os dados necessários.'
+    static EmailCadastrado = 'Email já possui cadastro.'
+    static CPFCadastrado = 'CPF já possui cadastrado.'
+    static TelefoneInvalido = 'Telefone inválido.'
+    static DadosFaltantes = 'Há dados faltando na solicitação, por favor revise-os.'
+    static UsuarioNaoCadastrado = 'Usuário não cadastrado.'
 }

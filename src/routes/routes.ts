@@ -12,6 +12,10 @@ router.post('/login_escola', escolaController.fazerLogin)
 router.post('/cadastrar_endereco', escolaController.cadastrarEndereco)
 
 
+// rotas de buscar escolas
+router.get('/buscar_escolas/:estado/:cidade', escolaController.buscarEscolasPorCidade);
+
+
 // rotas de admin
 router.post('/admins', adminController.criarAdministrador); 
 router.post('/login_admin', adminController.fazerLogin)

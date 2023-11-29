@@ -6,6 +6,8 @@ import { DadosLoginEscolaDTO } from '../dtos/escolas/dados-login-escola.dto';
 import ErrosValidacao from '../services/erros/erros-validacao-dados';
 import DadosEnderecoService from '../services/escola/endereco/dados-endereco.service';
 import { DadosEnderecoDTO } from '../dtos/escolas/endereco/dados-endereco.dto';
+import Endereco from '../models/endereco.model';
+import { Op } from 'sequelize';
 
 const escolaService = new EscolaService(); 
 const dadosEnderecoService = new DadosEnderecoService();
@@ -113,6 +115,35 @@ class EscolaController {
                 message: 'Erro ao acessar servidor.',
                 errors: errors
             });
+        }
+    }
+
+
+    public async buscarEscolasPorCidade(req: Request, res: Response): Promise<void> {
+        const { estado, cidade } = req.params;
+      
+        try {
+          const escolas: Endereco[] = await Endereco.findAll({
+            where: {
+              uf: estado,
+              cidade: cidade
+            },
+          });
+      
+          if (escolas.length === 0) {
+            res.status(404).json({
+              message: 'Nenhuma escola encontrada para o estado e cidade informados.',
+            });
+            return;
+          }
+      
+          console.log(escolas)
+          res.status(200).json(escolas);
+        } catch (error) {
+          console.error('Erro ao buscar escolas:', error);
+          res.status(500).json({
+            message: 'Erro interno ao buscar escolas.',
+          });
         }
     }
 }

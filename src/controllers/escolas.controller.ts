@@ -7,7 +7,8 @@ import ErrosValidacao from '../services/erros/erros-validacao-dados';
 import DadosEnderecoService from '../services/escola/endereco/dados-endereco.service';
 import { DadosEnderecoDTO } from '../dtos/escolas/endereco/dados-endereco.dto';
 import Endereco from '../models/endereco.model';
-import { Op } from 'sequelize';
+import { Op, QueryTypes } from 'sequelize';
+import sequelize from '../config/dtabase';
 
 const escolaService = new EscolaService(); 
 const dadosEnderecoService = new DadosEnderecoService();
@@ -123,29 +124,33 @@ class EscolaController {
         const { estado, cidade } = req.params;
       
         try {
-          const escolas: Endereco[] = await Endereco.findAll({
-            where: {
-              uf: estado,
-              cidade: cidade
-            },
-          });
+          const enderecos = await sequelize.query(
+            `SELECT escolas.*, enderecos.*
+             FROM escolas
+             JOIN enderecos ON escolas.cnpj = enderecos.cnpj
+             WHERE enderecos.uf = :estado AND enderecos.cidade = :cidade`,
+            {
+              replacements: { estado, cidade },
+              type: QueryTypes.SELECT,
+            }
+          );
       
-          if (escolas.length === 0) {
+          if (enderecos.length === 0) {
             res.status(404).json({
               message: 'Nenhuma escola encontrada para o estado e cidade informados.',
             });
             return;
           }
       
-          console.log(escolas)
-          res.status(200).json(escolas);
+          console.log(enderecos);
+          res.status(200).json(enderecos);
         } catch (error) {
           console.error('Erro ao buscar escolas:', error);
           res.status(500).json({
             message: 'Erro interno ao buscar escolas.',
           });
         }
-    }
+      }
 }
 
 export default EscolaController
